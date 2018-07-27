@@ -1,7 +1,7 @@
 from gevent.server import StreamServer
-from command_parser import parse_command
+from src.command_parser import parse_command
 import socket
-from command_handler import handle_command, resp_error
+from src.command_handler import handle_command, resp_error
 
 
 def read_from_client(s, address):
