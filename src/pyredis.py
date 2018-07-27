@@ -2,7 +2,7 @@
 import sys, os
 from src.daemon import Daemon
 from src.server import bind_server
-TCP_IP = '0.0.0.0'
+TCP_IP = '127.0.0.1'
 TCP_PORT = 6379
 BUFFER_SIZE = 65536
 SPAWN = 10000

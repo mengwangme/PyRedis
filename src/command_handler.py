@@ -11,7 +11,6 @@ from src.memory import memory
 def output_commands():
     """
     Returns an array of array of strings that define available commands
-    STUDENT TODO: extend this to include all available commands
     :return:
     """
     return resp_array(
@@ -79,7 +78,6 @@ def spop_command(key):
     """
     Pop the first value from a set, this is based on the dict implementation in python and as such
     is not a 1:1 with the redis implementation which is based on a hashmap and pops items randomly from a set
-    STUDENT TODO: rewrite all the set commands to use hashmaps and ensure that spop is random.
     :param args: args[1] is the key, args[2]
     :return:
     """

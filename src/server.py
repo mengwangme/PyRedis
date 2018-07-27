@@ -37,7 +37,7 @@ def bind_server(ip, port, spawn_limit):
     """
     try:
         server = StreamServer((ip, port), read_from_client, spawn=spawn_limit)  # creates a new server
-        server.start()
+        # server.start()
         server.serve_forever()
     except Exception as e:
         print(str(e))
