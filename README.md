@@ -6,9 +6,9 @@
 
 #### ENV
 
-python==3.6.5
-gevent==1.3.5
-greenlet==0.4.13
+- python==3.6.5
+- gevent==1.3.5
+- greenlet==0.4.13
 
 #### Structure
 
