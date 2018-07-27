@@ -10,7 +10,7 @@ python==3.6.5
 gevent==1.3.5
 greenlet==0.4.13
 
-#### structure
+#### Structure
 
 ```
 pyredis
@@ -33,11 +33,9 @@ pyredis
     └── test_command_parser.py
 ```
 
-#### 实验步骤
 
 #### Step 0
 
-下载依赖包
 
 ```
 $ Install dependencies with pip install -r requirements.txt
@@ -45,7 +43,6 @@ $ Install dependencies with pip install -r requirements.txt
     
 #### Step 1
 
-测试
 
 ```
 $ python -m unittest discover -s tests/ -p 'test_*.py'
@@ -53,7 +50,6 @@ $ python -m unittest discover -s tests/ -p 'test_*.py'
 
 #### Step 2
 
-**注意**：去除了src/文件夹中py文件的import src. 部分，才运行成功
 
 You can now control daemon with:
 
@@ -68,7 +64,6 @@ $ python src/pyredis.py restart
 
 #### Step 3
 
-作为PIP包下载
 
 Install as a PIP package
 
@@ -83,7 +78,6 @@ To do a daemon install (after you have installed the pip package)
 
 #### Step 4
 
-建立/运行docker容器
 
 Build/run as a docker container
 
