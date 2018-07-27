@@ -5,7 +5,7 @@
 
 import gevent
 import time
-from memory import memory
+from src.memory import memory
 
 
 def output_commands():
