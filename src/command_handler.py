@@ -180,17 +180,7 @@ def sunion_command(key, args):
     return resp_array(final_set)
 
 
-def lpush_command(key, args):
-    """
-    push元素到列表，如果列表不存在创建该列表
-    :param key: 执行push操作的列表
-    :param args: 一个或多个元素
-    :return:
-    """
-    if key not in memory.volatile: # key不存在，创建列表
-        memory.volatile[key] = []
-    memory.volatile[key] = args + memory.volatile[key] # 将values加入到列表
-    return resp_integer(len(memory.volatile[key])) # 返回列表的长度
+
 
 
 def flush_command():
@@ -284,6 +274,38 @@ def llen_command(key):
     """
     l = memory.volatile[key]
     return resp_integer(len(l))
+
+def lrange_command(key, args):
+    '''
+    返回列表 key 中指定区间内的元素，区间以偏移量 start 和 stop 指定。
+    下标(index)参数 start 和 stop 都以 0 为底，也就是说，以 0 表示列表的第一个元素，以 1 表示列表的第二个元素，以此类推。
+    你也可以使用负数下标，以 -1 表示列表的最后一个元素， -2 表示列表的倒数第二个元素，以此类推。
+    :param key:
+    :return:
+    '''
+    if key not in memory.volatile or int(args[0]) > int(args[1]):
+        return resp_bulk_string("empty list or set")
+    else:
+        temp = []
+        for item in memory.volatile[key]:
+            temp.append(resp_string(item))
+        if args[1]>len(temp-1):
+            args = len(temp-1)
+        return resp_array(temp[int(args[0]):int(args[1])])
+
+def lpush_command(key, args):
+    """
+    push元素到列表，如果列表不存在创建该列表
+    :param key: 执行push操作的列表
+    :param args: 一个或多个元素
+    :return:
+    """
+    if key not in memory.volatile: # key不存在，创建列表
+        memory.volatile[key] = []
+    memory.volatile[key] = args + memory.volatile[key] # 将values加入到列表
+    return resp_integer(len(memory.volatile[key])) # 返回列表的长度
+
+
 
 
 def hset_command(key, args):
@@ -415,7 +437,8 @@ command_map = {
     "HMGET": {"min": 2, "max": -1, "function": hmget_command},
     "HMSET": {"min": 3, "max": -3, "function": hmset_command},
     "HGETALL": {"min": 1, "max": 1, "function": hget_all_command},
-    "SMEMBERS": {"min":1, "max":1, "function": smembers_command},
+    "SMEMBERS": {"min": 1, "max": 1, "function": smembers_command},
+    "LRANGE": {"min": 3, "max": 3, "function": lrange_command},
 }
 
 
