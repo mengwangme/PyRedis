@@ -52,6 +52,24 @@ def get_command(key):
     return resp_bulk_string(memory.volatile[key])
 
 
+def smembers_command(key):
+    '''
+    返回集合 key 中的所有成员。
+    不存在的 key 被视为空集合。
+    :param key:
+    :return:
+    '''
+    if memory.volatile.get(key) is None:  # 如果key不存在
+        return resp_bulk_string("empty list or set")
+    else:
+        temp = []
+        for item in memory.volatile[key]:
+             temp.append(resp_string(item))
+        return resp_array(temp)
+
+
+
+
 def sadd_command(key, args):
     """
     给集合添加value,如果集合不存在则创建改集合
@@ -396,7 +414,8 @@ command_map = {
     "HGET": {"min": 2, "max": 2, "function": hget_command},
     "HMGET": {"min": 2, "max": -1, "function": hmget_command},
     "HMSET": {"min": 3, "max": -3, "function": hmset_command},
-    "HGETALL": {"min": 1, "max": 1, "function": hget_all_command}
+    "HGETALL": {"min": 1, "max": 1, "function": hget_all_command},
+    "SMEMBERS": {"min":1, "max":1, "function": smembers_command},
 }
 
 
