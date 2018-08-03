@@ -50,6 +50,12 @@ class CommandHandlerTests(unittest.TestCase):
     #     response = sunion_command("key1", ["key2"])
     #     self.assertEqual(response, resp_array([resp_string("value1"), resp_string("value2")]))
 
+    def test_smembers(self):
+        memory.volatile={}
+        sadd_command("key", ["value1", "value2"])
+        response = smembers_command("key")
+        self.assertEqual(response, resp_array([resp_string("value1"), resp_string("value2")]))
+
     # 列表
     def test_llen(self): # 测试llen处理函数
         memory.volatile = {}
@@ -73,6 +79,12 @@ class CommandHandlerTests(unittest.TestCase):
         lpush_command("list", ["value"])
         response = lindex_command("list", "0")
         self.assertEqual(response, resp_string("value"))
+
+    def test_lrange(self):
+        memory.volatile = {}
+        lpush_command("key", ["value1", "value2", "value3"])
+        response = lrange_command("key", ["0", "1"])
+        self.assertEqual(response, resp_array([resp_string("value1"), resp_string("value2")]))
 
     # 哈希
     def test_hset(self):
@@ -145,14 +157,4 @@ class CommandHandlerTests(unittest.TestCase):
         del_command("key")
         self.assertEqual(memory.volatile, {})
 
-    def test_smembers(self):
-        memory.volatile={}
-        sadd_command("key", ["value1", "value2"])
-        response = smembers_command("key")
-        self.assertEqual(response, resp_array([resp_string("value1"), resp_string("value2")]))
 
-    def test_lrange(self):
-        memory.volatile={}
-        lpush_command("key", ["value1", "value2", "value3"])
-        response = lrange_command("key", ["0", "1"])
-        self.assertEqual(response, resp_array([resp_string("value1"), resp_string("value2")]))

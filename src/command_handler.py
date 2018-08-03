@@ -168,17 +168,20 @@ def sunion_command(key, args):
     return resp_array(final_set)
 
 
-def lpush_command(key, args):
-    """
-    Push a value onto a list, creates the list if it does not exist
-    :param key: key of the list to push onto
-    :param args: values to push onto the list, can be many
+def smembers_command(key):
+    '''
+    :param key:
     :return:
-    """
-    if key not in memory.volatile:
-        memory.volatile[key] = []
-    memory.volatile[key] = args + memory.volatile[key]
-    return resp_integer(len(memory.volatile[key]))
+    '''
+    if memory.volatile.get(key) is None:  # 如果key不存在
+        return resp_bulk_string("empty list or set")
+    else:
+        temp = []
+        for item in memory.volatile[key]:
+             temp.append(resp_string(item))
+        return resp_array(temp)
+
+
 
 
 def flush_command():
@@ -236,6 +239,33 @@ def ttl_command(key):
     else:
         return resp_error("NO KEY MATCHING {0} HAS AN EXPIRATION SET".format(key))
 
+
+def lpush_command(key, args):
+    """
+    Push a value onto a list, creates the list if it does not exist
+    :param key: key of the list to push onto
+    :param args: values to push onto the list, can be many
+    :return:
+    """
+    if key not in memory.volatile:
+        memory.volatile[key] = []
+    memory.volatile[key] = args + memory.volatile[key]
+    return resp_integer(len(memory.volatile[key]))
+
+def lrange_command(key, args):
+    '''
+    :param key:
+    :return:
+    '''
+    if key not in memory.volatile or int(args[0]) > int(args[1]):
+        return resp_bulk_string("empty list or set")
+    else:
+        temp = []
+        for item in memory.volatile[key]:
+            temp.append(resp_string(item))
+        # if int(args[1])>=len(temp):
+        #     args[1] = len(temp)-1
+        return resp_array(temp[int(args[0]):int(args[1])+1])
 
 def lpop_command(key):
     """
@@ -407,7 +437,9 @@ command_map = {
     "HGET": {"min": 2, "max": 2, "function": hget_command},
     "HMGET": {"min": 2, "max": -1, "function": hmget_command},
     "HMSET": {"min": 3, "max": -3, "function": hmset_command},
-    "HGETALL": {"min": 1, "max": 1, "function": hget_all_command}
+    "HGETALL": {"min": 1, "max": 1, "function": hget_all_command},
+    "SMEMBERS": {"min": 1, "max": 1, "function": smembers_command},
+    "LRANGE": {"min": 3, "max": 3, "function": lrange_command},
 }
 
 
