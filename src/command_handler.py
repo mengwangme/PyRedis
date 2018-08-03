@@ -173,7 +173,7 @@ def smembers_command(key):
     :param key:
     :return:
     '''
-    if memory.volatile.get(key) is None:  # 如果key不存在
+    if memory.volatile.get(key) is None:
         return resp_bulk_string("empty list or set")
     else:
         temp = []
@@ -263,8 +263,8 @@ def lrange_command(key, args):
         temp = []
         for item in memory.volatile[key]:
             temp.append(resp_string(item))
-        # if int(args[1])>=len(temp):
-        #     args[1] = len(temp)-1
+        if int(args[1])>=len(temp):
+            args[1] = len(temp)-1
         return resp_array(temp[int(args[0]):int(args[1])+1])
 
 def lpop_command(key):

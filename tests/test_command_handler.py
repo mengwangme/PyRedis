@@ -5,18 +5,18 @@ from src.memory import memory
 
 
 class CommandHandlerTests(unittest.TestCase):
-    def test_set(self): # 测试set处理函数
+    def test_set(self):
         memory.volatile = {}
         response = set_command("key", ["value"])
         self.assertEqual(memory.volatile["key"], "value")
 
-    def test_get(self): # 测试get处理函数
+    def test_get(self):
         memory.volatile = {}
         set_command("key", ["value"])
         response = get_command("key")
         self.assertEqual(response, resp_bulk_string("value"))
 
-    # 集合
+    # set
 
     def test_sadd(self):
         memory.volatile = {}
@@ -56,8 +56,8 @@ class CommandHandlerTests(unittest.TestCase):
         response = smembers_command("key")
         self.assertEqual(response, resp_array([resp_string("value1"), resp_string("value2")]))
 
-    # 列表
-    def test_llen(self): # 测试llen处理函数
+    # list
+    def test_llen(self):
         memory.volatile = {}
         lpush_command("list", ["1", "2", "3"])
         response = llen_command("list")
@@ -86,7 +86,7 @@ class CommandHandlerTests(unittest.TestCase):
         response = lrange_command("key", ["0", "1"])
         self.assertEqual(response, resp_array([resp_string("value1"), resp_string("value2")]))
 
-    # 哈希
+    # hash
     def test_hset(self):
         memory.volatile = {}
         response = hset_command("key",["field", "value"])
@@ -115,7 +115,7 @@ class CommandHandlerTests(unittest.TestCase):
         response = hget_all_command("key")
         self.assertEqual(response, resp_array([resp_string("field1"), resp_string("value1"), resp_string("field2"), resp_string("value2")]))
 
-    # 通用命令
+    # normal
     def test_flush(self):
         flush_command()
         self.assertEqual(memory.volatile, {})

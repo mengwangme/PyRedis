@@ -3,11 +3,11 @@ from src.command_parser import parse_command
 
 
 class CommandParserTests(unittest.TestCase):
-    def test_parse_commandt(self): # 测试COMMAND命令
+    def test_parse_commandt(self): 
         response = parse_command("*1\r\n$7\r\nCOMMAND\r\n", 0)
         self.assertEqual(response[0], "COMMAND")
 
-    def test_parse_set_command(self): # 测试解析set命令
+    def test_parse_set_command(self):
         '''
         SET key value
         :return:
@@ -26,7 +26,7 @@ class CommandParserTests(unittest.TestCase):
         self.assertEqual(response[0], "GET")
         self.assertEqual(response[1], "key")
 
-    # 集合
+    # set
 
     def test_parse_sadd_command(self):
         '''
@@ -78,7 +78,7 @@ class CommandParserTests(unittest.TestCase):
         self.assertEqual(response[2], "group2")
 
 
-    # 列表
+    # list
 
     def test_parse_lpush_command(self):
         '''
@@ -119,7 +119,7 @@ class CommandParserTests(unittest.TestCase):
         self.assertEqual(response[0], "LLEN")
         self.assertEqual(response[1], "key")
 
-    # 哈希
+    # hash
 
     def test_parse_hset_command(self):
         '''
@@ -175,7 +175,7 @@ class CommandParserTests(unittest.TestCase):
         self.assertEqual(response[0], "HGETALL")
         self.assertEqual(response[1], "key")
 
-    # 通用
+    # normal
 
     def test_parse_flush_command(self):
         '''
