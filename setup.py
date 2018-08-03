@@ -12,8 +12,8 @@ setup(
     version='1.0.0',
     description='Redis Python Implementation',
     long_description=long_description,
-    author='ZP',
-    author_email='zeashan@gmail.com',
+    author='shiyanlou',
+    author_email='faizwang@163.com',
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     install_requires=['gevent'],
     entry_points={

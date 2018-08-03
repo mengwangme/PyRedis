@@ -3,7 +3,7 @@ from src.command_parser import parse_command
 
 
 class CommandParserTests(unittest.TestCase):
-    def test_parse_commandt(self): 
+    def test_parse_commandt(self):
         response = parse_command("*1\r\n$7\r\nCOMMAND\r\n", 0)
         self.assertEqual(response[0], "COMMAND")
 
