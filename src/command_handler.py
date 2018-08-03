@@ -52,20 +52,7 @@ def get_command(key):
     return resp_bulk_string(memory.volatile[key])
 
 
-def smembers_command(key):
-    '''
-    返回集合 key 中的所有成员。
-    不存在的 key 被视为空集合。
-    :param key:
-    :return:
-    '''
-    if memory.volatile.get(key) is None:  # 如果key不存在
-        return resp_bulk_string("empty list or set")
-    else:
-        temp = []
-        for item in memory.volatile[key]:
-             temp.append(resp_string(item))
-        return resp_array(temp)
+
 
 
 
@@ -79,7 +66,7 @@ def sadd_command(key, args):
     """
     if memory.volatile.get(key) is None:  # 如果key不存在
         memory.volatile[key] = set(args)    # 创建集合
-        return resp_integer(len(memory.volatile[args])) # 返回集合长度
+        return resp_integer(len(args)) # 返回集合长度
     else:   # key存在
         if isinstance(memory.volatile.get(key), set):  # 集合已存在
             r = len(memory.volatile.get(key).intersection(set(args))) # 返回的r是原集合和输入参数集合的共有元素集合的长度
@@ -275,23 +262,7 @@ def llen_command(key):
     l = memory.volatile[key]
     return resp_integer(len(l))
 
-def lrange_command(key, args):
-    '''
-    返回列表 key 中指定区间内的元素，区间以偏移量 start 和 stop 指定。
-    下标(index)参数 start 和 stop 都以 0 为底，也就是说，以 0 表示列表的第一个元素，以 1 表示列表的第二个元素，以此类推。
-    你也可以使用负数下标，以 -1 表示列表的最后一个元素， -2 表示列表的倒数第二个元素，以此类推。
-    :param key:
-    :return:
-    '''
-    if key not in memory.volatile or int(args[0]) > int(args[1]):
-        return resp_bulk_string("empty list or set")
-    else:
-        temp = []
-        for item in memory.volatile[key]:
-            temp.append(resp_string(item))
-        if args[1]>len(temp-1):
-            args = len(temp-1)
-        return resp_array(temp[int(args[0]):int(args[1])])
+
 
 def lpush_command(key, args):
     """
@@ -398,6 +369,43 @@ def not_implemented_command(): # 没有实现此命令
 
 def no_such_key(key): # 不存在此key
     return resp_error("NO SUCH KEY {0} EXISTS".format(key))
+
+
+def lrange_command(key, args):
+    '''
+    返回列表 key 中指定区间内的元素，区间以偏移量 start 和 stop 指定。
+    下标(index)参数 start 和 stop 都以 0 为底，也就是说，以 0 表示列表的第一个元素，以 1 表示列表的第二个元素，以此类推。
+    你也可以使用负数下标，以 -1 表示列表的最后一个元素， -2 表示列表的倒数第二个元素，以此类推。
+    :param key:
+    :return:
+    '''
+    if key not in memory.volatile or int(args[0]) > int(args[1]):
+        return resp_bulk_string("empty list or set")
+    else:
+        temp = []
+        for item in memory.volatile[key]:
+            temp.append(resp_string(item))
+        # if int(args[1])>=len(temp):
+        #     args[1] = len(temp)-1
+        return resp_array(temp[int(args[0]):int(args[1])+1])
+
+def smembers_command(key):
+    '''
+    返回集合 key 中的所有成员。
+    不存在的 key 被视为空集合。
+    :param key:
+    :return:
+    '''
+    if memory.volatile.get(key) is None:  # 如果key不存在
+        return resp_bulk_string("empty list or set")
+    else:
+        temp = []
+        for item in memory.volatile[key]:
+             temp.append(resp_string(item))
+        return resp_array(temp)
+
+
+
 
 
 """
